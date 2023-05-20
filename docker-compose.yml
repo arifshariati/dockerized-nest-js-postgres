@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  backend:
+    container_name: backend
+    build:
+      context: .
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 4999:4999
+    env_file:
+      - ./.env
+    command: npm run start:dev
+    networks:
+      - default_network
+    depends_on:
+      - postgres
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./pgData:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - default_network
+networks:
+  default_network:
