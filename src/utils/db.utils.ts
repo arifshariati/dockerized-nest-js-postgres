@@ -3,7 +3,7 @@ export const getDBConnectionconfig = (): any => {
     return {
       type: 'postgres',
       url: process.env.DATABASE_URL,
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      entities: ['dist/**/*.entity{.ts,.js}'],
       synchronize: true,
       ssl: {
         rejectUnauthorized: false,
