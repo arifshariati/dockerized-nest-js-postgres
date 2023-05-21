@@ -5,12 +5,14 @@ import { AppService } from './app.service';
 import { PromptModule } from './prompt/prompt.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { getDBConnectionconfig } from './utils';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(getDBConnectionconfig()),
     PromptModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
