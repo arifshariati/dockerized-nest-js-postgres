@@ -18,6 +18,10 @@ const bootstrap = async () => {
       'This API gatway documentation is for the dockerized nest js application with Postgresql DB',
     )
     .setVersion('v1.0.0')
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
+      'access-token',
+    )
     .build();
 
   const doc = SwaggerModule.createDocument(app, swaggerConfig);

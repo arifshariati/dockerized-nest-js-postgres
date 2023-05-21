@@ -3,38 +3,43 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UsePipes,
+  ValidationPipe,
   UseGuards,
 } from '@nestjs/common';
+import { UserService } from './user.service';
+import { CreateUserDto } from './dto/create-user.dto';
 import {
   ApiBearerAuth,
   ApiForbiddenResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { PromptService } from './prompt.service';
-import { CreatePromptDto } from './dto/create-prompt.dto';
-import { UpdatePromptDto } from './dto/update-prompt.dto';
-
-import { ValidationPipe } from 'src/pipes/validation.pipe';
+import { LoginDto } from './dto/login.dto';
+import { ILoginResponse } from './interfaces';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
-@ApiTags('prompt')
-@Controller('prompt')
-export class PromptController {
-  constructor(private readonly promptService: PromptService) {}
+@ApiTags('user')
+@Controller('user')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
   @UsePipes(new ValidationPipe())
+  @Post()
   @ApiOkResponse({ description: 'The resource was created succesfully' })
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  @Post()
-  create(@Body() createPromptDto: CreatePromptDto) {
-    return this.promptService.create(createPromptDto);
+  create(@Body() createUserDto: CreateUserDto) {
+    return this.userService.create(createUserDto);
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post('login')
+  @ApiOkResponse({ description: 'The resource was found' })
+  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
+  login(@Body() loginDto: LoginDto): Promise<ILoginResponse> {
+    return this.userService.login(loginDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -43,7 +48,7 @@ export class PromptController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @Get()
   findAll() {
-    return this.promptService.findAll();
+    return this.userService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
@@ -52,17 +57,7 @@ export class PromptController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.promptService.findOne(id);
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth('access-token')
-  @UsePipes(new ValidationPipe())
-  @ApiOkResponse({ description: 'The resource was updated successfully' })
-  @ApiForbiddenResponse({ description: 'Unauthorized Request' })
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePromptDto: UpdatePromptDto) {
-    return this.promptService.update(id, updatePromptDto);
+    return this.userService.findOne(id);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -71,6 +66,6 @@ export class PromptController {
   @ApiForbiddenResponse({ description: 'Unauthorized Request' })
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.promptService.remove(id);
+    return this.userService.remove(id);
   }
 }
