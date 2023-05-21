@@ -41,7 +41,14 @@ $ docker rmi [image_id]
 
 ## Documentation
 
-This repo uses SWAGGER documentation and once Docker containers are up and running you can navigate to (`http://localhost:4999/api` or `http://127.0.0.1/api`) on your browser.
+This repo uses SWAGGER documentation and once Docker containers are up and running you can navigate to (`http://localhost:4999/api` or `http://127.0.0.1:4999/api`) on your browser.
+
+For production version, use (`https://dockerized-nest-js-postgres.herokuapp.com/api`). Do not forget to do below steps;
+1. Create new user.
+2. Login with new user credentials
+3. Attached token to Document authorization section at very top
+
+Enjoy playing around with the API gateway.
 
 ## Note:
 
